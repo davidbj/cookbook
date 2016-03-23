@@ -127,11 +127,73 @@ if err != nil {
  arr := [2][4]int{{1,2,3,4}, {5,6,7,8}}
  ```
 
- ### slice
-    在很多场景中,数组并不能满足我们的需求.在初始定义数组时,我们并不知道需要多大的数组,因此我们就需要"动态数组".在Go里面这种数据结构叫slice.
+# slice(切片)
+    在很多应用场景,数组并不能满足我们的需求。在初始定义数组时,我们并不知道需要多大的数组,因此我们就需要"动态数组".在Go里面这种数据结构叫slice.
 
-    slice并不是真正意义上的动态数组,而是一个引用类型.slice总是指向一个底层array,slice的声明也可以像array一样,只是不需要长度.
+    slice并不是真正意义上的动态数组,而是一个饮用类型.slice总是指向一个底层的array,slice的声明也可以像array一样,只是不需要长度.
+    
+    append()函数会改变slice所引用的数组的内容，从而影响到引用同一数组的其它slice.但当slice中没有剩余空间时,此时将动态分配新的数组空间.返回的slice数组指针将指向这个空间,而原数组的内容将保持不变;其它引用此数组的slice则不受影响.
+    
+```
+var numbers []int                    //声明一个int类型的slice.
+numbers ＝ append(numbers, 2)        //新增加一个元素
+numbers ＝ append(numbers, 2,3,4)   //新增多个元素
+
+numbers := []int{1,2,3}              //另外一种常见slice方式
+
+＃切片截取
+arr := [10]int{1,2,3,4,5,6,7,8,9,10}    //创建一个数组
+var numbers []int                       //定义一个slice
+numbers = arr[1:4]                      //初始化一个slice
+numbers = arr[:]
+numbers = arr[0:]
+```
+    
+## slice 和 array区别
+    slice和数组在声明时的区别：声明数组时,方括号内写明了数组的长度和使用...自动计算长度,而声明slice时,方括号内没有任何符号.
+    
 
 ```
-arr := []byte{'a', 'b', 'c', 'd'} 
+var a int[]
+var b int[]
+arr := [10]int{1,2,3,4,5,6,7,8,9,10}
+a = arr[:]
+b = arr[:]
+a[0] = 10
+printSlice(a)
+printSlie(b)
+
+func printSlice(x []int){
+    println(x)
+}
 ```
+   slice是引用类型,所以当引用改变其中元素的值时,其它的所有引用都会改变该值.
+   
+# map
+   map 也就是python中字典的概念,它的格式为map [keyType]valueType
+   
+```
+var numbers map[string]string
+numbers = make(map[string]string)
+numbers["name"] = "David"
+numbers["sex"] = "boy"
+for key, value := range numbers {
+    Printf("%v => %v\n", key, value)
+}
+
+或者:
+numbers := make(map[string]string)
+numbers["name"] = "David"
+numbers["sex"] = "boy"
+for key, value := range numbers {
+    Printf("%v => %v\n", key, value)
+}
+
+numbers := map[string]string {"name" : "david", "sex": "boy"}   //初始化一个字典
+
+value, status = numbers['name']
+map 返回两个值,第二个返回值,如果不存在key,那么status为false.如果存在status为true.
+
+delete(numbers, "name")     //删除numbers map里的name元素.
+
+``` 
